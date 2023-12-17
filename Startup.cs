@@ -1,16 +1,19 @@
+using DomainLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RepositoryLayer.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace VezeetaDemo
 {
     public class Startup
@@ -25,6 +28,19 @@ namespace VezeetaDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            // Other service configurations...
+
+            // Configure the DbContext with the connection string
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer("Data Source=Atty;Initial Catalog=VezeetaDemo;Integrated Security=True"));
+
+            // Configure Identity
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

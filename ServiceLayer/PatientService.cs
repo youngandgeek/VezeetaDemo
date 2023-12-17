@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.Enums
+namespace ServiceLayer
 {
-   
-        public enum Gender
-        {
-        Female = 0,
-        Male = 1
+    internal class PatientService
+    {
     }
-    
 }

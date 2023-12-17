@@ -14,7 +14,7 @@ namespace DomainLayer.Models
 
         // Foreign key property to associate with a doctor
         [ForeignKey("Doctor")]
-        public int id { get; set; }
+        public int DoctorId { get; set; }
         // Navigation property to represent the relationship with a doctor
         public Doctor Doctors { get; set; }
     }

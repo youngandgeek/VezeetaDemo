@@ -10,11 +10,12 @@ namespace DomainLayer.Models
 {
     public class ApplicationUser : IdentityUser
     {
-      
-            // Additional properties for your application's user
+        public string Image { get; set; }
+
+        // Additional properties for your application's user
         public string FullName { get; set; }
-        public Gender gender { get; set; }
-        public DateTime dateOfBirth { get; set; }
+        public Gender Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
 
         // Navigation property to Patient

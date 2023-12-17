@@ -10,7 +10,6 @@ namespace DomainLayer.Models
 {
     public class Patient
     {
-        public string image { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
        

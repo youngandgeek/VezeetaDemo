@@ -10,7 +10,6 @@ namespace DomainLayer.Models
 {
     public class Doctor
     {
-        public string image { get; set; }
         public string FullName { get; set; }
         public string Specialization { get; set; }
         public decimal Price { get; set; }

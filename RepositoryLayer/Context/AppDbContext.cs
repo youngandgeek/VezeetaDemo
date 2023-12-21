@@ -25,7 +25,8 @@ namespace RepositoryLayer.Context
        : base(options)
         {
         }
-     
+
+
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Booking> Bookings { get; set; }
@@ -45,6 +46,7 @@ namespace RepositoryLayer.Context
                 .WithOne()
                 .HasForeignKey<Patient>(p => p.Id);
 
+         
             // Example: Configure a one-to-one relationship between ApplicationUser and Doctor
             builder.Entity<ApplicationUser>()
                 .HasOne(d => d.DoctorProfile)
@@ -52,10 +54,10 @@ namespace RepositoryLayer.Context
                 .HasForeignKey<Doctor>(d => d.Id);
 
             // Configure a one-to-many relationship between Doctor and Appointments
-            builder.Entity<Doctor>()
+/**            builder.Entity<Doctor>()
                 .HasMany(d => d.Appointments)
                 .WithOne(a => a.Doctors)
-                .HasForeignKey(a => a.DoctorId);
+                .HasForeignKey(a => a.Id);
 
           // Configure a one-to - many relationship between Doctor and Bookings
            builder.Entity<Doctor>()
@@ -68,7 +70,8 @@ namespace RepositoryLayer.Context
                 .HasMany(p => p.Bookings)
                 .WithOne(b => b.Patientinfo)
                 .HasForeignKey(b => b.PatientId);
-        }
+   **/
+            }
 
       
     }

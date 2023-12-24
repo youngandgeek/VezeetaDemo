@@ -9,7 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RepositoryLayer;
 using RepositoryLayer.Context;
+using ServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +34,18 @@ namespace VezeetaDemo
             // Other service configurations...
 
             // Configure the DbContext with the connection string
+            // Configure the DbContext with the connection string from appsettings.json
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer("Data Source=Atty;Initial Catalog=VezeetaDemo;Integrated Security=True"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+ 
             // Configure Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<PatientService>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
 
 
 

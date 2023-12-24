@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Context;
 
 namespace VezeetaDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231224140550_signuppatient")]
+    partial class signuppatient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,6 +52,9 @@ namespace VezeetaDemo.Migrations
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -178,21 +183,21 @@ namespace VezeetaDemo.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "744085cc-76e3-4b96-9541-15944dce6b6f",
+                            Id = "140ffaa0-b583-4713-bf25-025c13dc8c11",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "20804fb4-53bc-46b8-9b9a-45de8a6c88e1",
+                            Id = "04afa8a0-39e4-43b2-8c9c-6ca97ae2fb6d",
                             ConcurrencyStamp = "2",
                             Name = "Patient",
                             NormalizedName = "Patient"
                         },
                         new
                         {
-                            Id = "36304e67-53e1-4fce-9409-90875affcfa4",
+                            Id = "1611f7a3-36ec-455e-b6f4-5d127b05d960",
                             ConcurrencyStamp = "3",
                             Name = "Doctor",
                             NormalizedName = "Doctor"
@@ -327,9 +332,6 @@ namespace VezeetaDemo.Migrations
             modelBuilder.Entity("DomainLayer.Models.Patient", b =>
                 {
                     b.HasBaseType("DomainLayer.Models.ApplicationUser");
-
-                    b.Property<string>("ConfirmPassword")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");

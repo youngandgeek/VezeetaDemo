@@ -1,4 +1,5 @@
-﻿using DomainLayer.Enums;
+﻿using DomainLayer;
+using DomainLayer.Enums;
 using DomainLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -11,9 +12,7 @@ namespace RepositoryLayer
 {
     public interface IPatientRepository
     {
-        public bool SignUp(string image, string FirstName, string LastName,
-            string email, string phone, Gender gender, DateTime dateOfBirth);
-        // Task<IdentityResult> RegisterPatientAsync(SignupViewModel model);
+         Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel);
 
         public bool Login(string email, string password);
 

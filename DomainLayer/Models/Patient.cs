@@ -14,6 +14,7 @@ namespace DomainLayer.Models
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string ConfirmPassword { get; set; }
 
         public List<Booking> Bookings { get; set; }
 
@@ -21,6 +22,5 @@ namespace DomainLayer.Models
         //identity refrence 
         public string UserId { get; set; }
         public ApplicationUser PatientUser { get; set; }
-
     }
 }

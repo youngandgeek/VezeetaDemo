@@ -1,5 +1,7 @@
-﻿using DomainLayer.Enums;
+﻿using DomainLayer;
+using DomainLayer.Enums;
 using DomainLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using RepositoryLayer;
 using System;
 using System.Collections.Generic;
@@ -18,11 +20,10 @@ namespace ServiceLayer
             _patientRepository = patientRepository;
         }
 
-        public bool SignUp(string image, string firstName, string lastName, string email, string phone, Gender gender, DateTime dateOfBirth)
+        public async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
         {
             // Additional validation and business logic can be added here if needed
-
-            return _patientRepository.SignUp(image, firstName, lastName, email, phone, gender, dateOfBirth);
+            return await _patientRepository.SignUp(patientSignUpModel);
         }
 
         public bool Login(string email, string password)

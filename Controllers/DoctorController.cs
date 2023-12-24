@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer;
@@ -29,7 +30,9 @@ namespace VezeetaDemo.Controllers
 
                 return Unauthorized("Invalid credentials.");
             }
-
+        //if u want to authorize only doctor to see the bookings when logged in.
+       // [Authorize(Roles="Doctor")] and if you're using mvc-> in .cshtml page @if(User.IsInRole("Doctor") <h>hey</h>
+       
             [HttpGet("bookings")]
             public IActionResult GetAllBookings([FromQuery] BookingSearchRequestModel model)
             {

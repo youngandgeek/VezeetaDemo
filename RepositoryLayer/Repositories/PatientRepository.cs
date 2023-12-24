@@ -1,5 +1,7 @@
-﻿using DomainLayer.Enums;
+﻿using DomainLayer;
+using DomainLayer.Enums;
 using DomainLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Context;
 using System;
@@ -11,42 +13,40 @@ using System.Threading.Tasks;
 namespace RepositoryLayer
 {
     public class PatientRepository : IPatientRepository
-    {    
-        private readonly AppDbContext _context;
+    {
 
-        public PatientRepository(AppDbContext context)
+        private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public PatientRepository(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-   
-        public bool SignUp(string image, string firstName, string lastName, string email, string phone, Gender gender, DateTime dateOfBirth)
+        public async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
         {
             try
             {
                 var patient = new Patient
                 {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = email,
-                    PhoneNumber = phone,
-                    Gender = gender,
-                    DateOfBirth = dateOfBirth,
-                   
-
+                    UserName = patientSignUpModel.Username,
+                    Email = patientSignUpModel.Email,
+                    PhoneNumber = patientSignUpModel.Phone,
+                    Gender = (Gender)patientSignUpModel.Gender,
+                    DateOfBirth = (DateTime)patientSignUpModel.DateOfBirth
                 };
+                var result = await _userManager.CreateAsync(patient, patientSignUpModel.Password);
 
-                _context.Patients.Add(patient);
-                _context.SaveChanges();
-
-                return true;
+                return result;
             }
             catch (Exception ex)
             {
                 // Handle exceptions appropriately (log, throw, etc.)
-                return false;
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to sign up." });
             }
         }
+
 
         public bool Login(string email, string password)
         {

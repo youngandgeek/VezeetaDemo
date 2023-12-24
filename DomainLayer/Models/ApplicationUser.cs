@@ -10,7 +10,7 @@ namespace DomainLayer.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public string Image { get; set; }
+        //public string Image { get; set; }
 
         // Additional properties for your application's user
         public string FullName { get; set; }

@@ -1,14 +1,8 @@
 ﻿using DomainLayer;
-using DomainLayer.Enums;
 using DomainLayer.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using ServiceLayer;
-using System;
-using System.Data;
 using System.Threading.Tasks;
 
 namespace VezeetaDemo.Controllers
@@ -53,13 +47,11 @@ namespace VezeetaDemo.Controllers
 
             if (result.Succeeded)
             {
-                // Handle successful login
-                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Login Successful" });
+                return Ok(new { Message = "Login successful" });
             }
             else
             {
-                // Handle failed login
-                return StatusCode(StatusCodes.Status401Unauthorized, new Response { Status = "Error", Message = "Invalid credentials" });
+                return Unauthorized(new { Message = "Invalid email or password" });
             }
 
 
@@ -81,8 +73,8 @@ namespace VezeetaDemo.Controllers
         **/
         }
     }
-      
-    }
+
+}
 
 
 

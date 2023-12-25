@@ -33,33 +33,36 @@ private readonly IPatientRepository _patientRepository;
 private readonly UserManager<ApplicationUser> _userManager;
 private readonly RoleManager<IdentityRole> _roleManager;
 private readonly IConfiguration _configuration;
+private readonly SignInManager<ApplicationUser> _signInManager;
 
-public PatientService(
-    IPatientRepository patientRepository,
+   public PatientService( IPatientRepository patientRepository,
     UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    IConfiguration configuration)
+    IConfiguration configuration,
+    SignInManager<ApplicationUser> signInManager
+    )
 {
     _patientRepository = patientRepository;
     _userManager = userManager;
     _roleManager = roleManager;
     _configuration = configuration;
+    _signInManager = signInManager;
 }
 
 
 
    public async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
         {
-            //check if user exist 
-
-            var userExist = await _userManager.FindByEmailAsync(patientSignUpModel.Email);
-            //if exists return ex
-            if (userExist != null)
+            // Check if passwords match
+            if (patientSignUpModel.Password != patientSignUpModel.ConfirmPassword)
             {
-                return IdentityResult.Failed(new IdentityError { Code = "403", Description = "Failed to sign up" });
-
+                // Handle the case where passwords don't match
+                return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match" });
             }
+
+            // Call the repository to handle signup logic
             var result = await _patientRepository.SignUp(patientSignUpModel);
+
             if (result.Succeeded)
             {
                 // Check if the "Patient" role exists before adding
@@ -72,63 +75,60 @@ public PatientService(
                     {
                         // Add the "Patient" role to the user
                         var addToRoleResult = await _userManager.AddToRoleAsync(patient, "Patient");
+
                         if (addToRoleResult.Succeeded)
                         {
-
+                            // Success
                             return IdentityResult.Success;
-
                         }
                         else
                         {
                             // Handle the case where adding the role was not successful
                             return IdentityResult.Failed(new IdentityError { Description = "Failed to sign up" });
-
                         }
                     }
                     else
                     {
                         // Handle the case where the user was not found after signing up
                         return IdentityResult.Failed(new IdentityError { Description = "User not found after signing up" });
-
-
-                    }
-                    }
-                    else
-                    {
-                        // Handle the case where the "Patient" role doesn't exist
-                        return IdentityResult.Failed(new IdentityError { Description = "Role 'Patient' does not exist" });
-
                     }
                 }
                 else
                 {
-                    return IdentityResult.Failed(new IdentityError { Description = "Failed to sign up" });
-
+                    // Handle the case where the "Patient" role doesn't exist
+                    return IdentityResult.Failed(new IdentityError { Description = "Role 'Patient' does not exist" });
                 }
-            
-
             }
-
-
-        public async Task<IdentityResult> Login(LoginRequestModel Patientlogin)
-        {  //find the user by email
-            var user = await _userManager.FindByEmailAsync(Patientlogin.Email);
-
-            //check if the user exists, password validation
-            if (user != null && await _userManager.CheckPasswordAsync(user, Patientlogin.Password))
+            else
             {
-                // User is authenticated successfully
-                var roles = await _userManager.GetRolesAsync(user);
-
-                return IdentityResult.Success;
+                // Handle the case where signup was not successful
+                return IdentityResult.Failed(new IdentityError { Description = "Failed to sign up" });
             }
-
-            //else return Authentication failed
-            return IdentityResult.Failed(new IdentityError { Description = "Failed to Login Check Emain or Password" });
-
         }
 
-public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
+
+        public async Task<SignInResult> Login(LoginRequestModel patientLogin)
+        {
+            // Find the user by email
+            var user = await _userManager.FindByEmailAsync(patientLogin.Email);
+
+            // Check if the user exists and validate the password
+            if (user != null && await _userManager.CheckPasswordAsync(user, patientLogin.Password))
+            {
+                // User is authenticated successfully
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return SignInResult.Success;
+            }
+
+            // Authentication failed
+            return SignInResult.Failed;
+        }
+
+
+        //find the user by email
+
+        public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
 {
     // Additional validation and business logic can be added here if needed
 

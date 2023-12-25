@@ -28,6 +28,22 @@ namespace RepositoryLayer
         {
             try
             {
+                // Check if passwords match
+                if (patientSignUpModel.Password != patientSignUpModel.ConfirmPassword)
+                {
+                    // Handle the case where passwords don't match
+                    return IdentityResult.Failed(new IdentityError { Description = "Passwords do not match" });
+                }
+
+                // Check if user exists
+                var userExist = await _userManager.FindByEmailAsync(patientSignUpModel.Email);
+                // If exists, return error
+                if (userExist != null)
+                {
+                    return IdentityResult.Failed(new IdentityError { Code = "403", Description = "Failed to sign up" });
+                }
+
+                // Create patient
                 var patient = new Patient
                 {
                     UserName = patientSignUpModel.Username,
@@ -47,27 +63,12 @@ namespace RepositoryLayer
             }
         }
 
+        public async Task<SignInResult> Login(LoginRequestModel Patientlogin) { 
+        // The Login method is implemented in the PatientService.
+        throw new NotImplementedException("Login method is not implemented in PatientRepository.");
+    }
 
-        public async Task<IdentityResult> Login(LoginRequestModel Patientlogin)
-        {
-            // Implement login logic based on your requirements
-            // For example, check credentials against the database
-            var patient = _context.Patients.FirstOrDefault(p => p.PatientUser.Email == Patientlogin.Email);
-
-            if (patient != null)
-            {
-                // Validate password here
-                // Example: if (PasswordHashing.ValidatePassword(password, patient.PatientUser.PasswordHash))
-                // {
-                //     return true;
-                // }
-            }
-
-                  return IdentityResult.Failed(new IdentityError { Description = "Failed to Login." });
-      
-        }
-
-        public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
+    public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
         {
             // Implement logic to get a list of doctors based on search criteria
             var doctors = _context.Doctors

@@ -1,4 +1,5 @@
 ﻿using DomainLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Context;
 using System;
@@ -10,31 +11,21 @@ using VezeetaDemo.RepositoryLayer;
 
 namespace RepositoryLayer
 {
-    internal class DoctorRepository : IDoctorRepository
+    public class DoctorRepository : IDoctorRepository
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DoctorRepository(AppDbContext context)
+        public DoctorRepository(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public bool Login(string email, string password)
+        public async Task<SignInResult> Login(LoginRequestModel Doctorlogin)
         {
-            // Implement login logic based on your requirements
-            // For example, check credentials against the database
-            var doctor = _context.Doctors.FirstOrDefault(d => d.DoctorUser.Email == email);
-
-            if (doctor != null)
-            {
-                // Validate password here
-                // Example: if (PasswordHashing.ValidatePassword(password, doctor.DoctorUser.PasswordHash))
-                // {
-                //     return true;
-                // }
-            }
-
-            return false;
+            // The Login method is implemented in the PatientService.
+            throw new NotImplementedException("Login method is not implemented in PatientRepository.");
         }
 
         public List<Patient> GetAllBooking(DateTime searchDate, int pageSize, int pageNumber)

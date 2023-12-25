@@ -2,20 +2,15 @@ using DomainLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RepositoryLayer;
 using RepositoryLayer.Context;
+using RepositoryLayer.Repositories;
 using ServiceLayer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 namespace VezeetaDemo
 {
     public class Startup
@@ -38,7 +33,7 @@ namespace VezeetaDemo
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
- 
+
             // Configure Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -46,6 +41,14 @@ namespace VezeetaDemo
 
             services.AddScoped<PatientService>();
             services.AddScoped<IPatientRepository, PatientRepository>();
+
+
+     /**       services.AddScoped<DoctorService>();
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
+     **/
+
+            services.AddScoped<AdminService>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
 
 
 
@@ -57,14 +60,19 @@ namespace VezeetaDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AdminService adminService)
         {
             if (env.IsDevelopment())
             {
+
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VezeetaDemo v1"));
+
+                // Seed admin user during application startup using AdminService
+                adminService.SeedAdminUser();
             }
+
 
             app.UseRouting();
 

@@ -26,16 +26,17 @@ namespace DomainLayer
         public Gender? Gender { get; set; }
 
         [Required(ErrorMessage = "Please Enter your Date Of Birth")]
+        [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
      
         [Required(ErrorMessage = "Please Enter A Valid Password")]
         [DataType(DataType.Password)]
         public String? Password { get; set; }
 
-      /**  [Required(ErrorMessage ="Please Retype your Password")]
+        [Required(ErrorMessage ="Please Retype your Password")]
         [Compare("Password", ErrorMessage = "Password doesn't match")]
         public string? ConfirmPassword { get; set; }
-    **/
+   
         }
 
     }

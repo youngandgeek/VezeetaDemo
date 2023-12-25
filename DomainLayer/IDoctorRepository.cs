@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System;
 using DomainLayer.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace VezeetaDemo.RepositoryLayer
 {
     public interface IDoctorRepository
     {
-        public bool Login(string email, string password);
+        Task<SignInResult> Login(LoginRequestModel drLoginModel);
+
         public List<Patient> GetAllBooking(DateTime searchDate, int pageSize, int pageNumber);
         public bool ConfirmCheckup(int bookingId);
 

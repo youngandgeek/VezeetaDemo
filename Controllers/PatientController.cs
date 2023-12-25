@@ -17,7 +17,7 @@ namespace VezeetaDemo.Controllers
         public class PatientController : ControllerBase
         {
 
-            private readonly PatientService _patientService;
+        private readonly PatientService _patientService;
 
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -65,6 +65,7 @@ namespace VezeetaDemo.Controllers
 
                         if (addToRoleResult.Succeeded)
                         {
+
                             return StatusCode(StatusCodes.Status201Created,
                                 new Response { Status = "Success", Message = "Account Created Successfully" });
                         }
@@ -98,19 +99,29 @@ namespace VezeetaDemo.Controllers
         }
 
         [HttpPost("login")]
-            public IActionResult Login([FromBody] LoginRequestModel model)
+            public async Task<IActionResult> LoginAsync([FromBody] LoginRequestModel model)
+        {   //find the user by email
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            //check if the user exists, password validation
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var result = _patientService.Login(model.Email, model.Password);
+                // User is authenticated successfully
+                var roles = await _userManager.GetRolesAsync(user);
 
-                if (result)
-                {
-                    return Ok("Patient logged in successfully.");
-                }
-
-                return Unauthorized("Invalid credentials.");
+                return Ok(new { Message = "Login successful" });
             }
 
-            [HttpGet("doctors")]
+            //else return Authentication failed
+            return Unauthorized(new { Message = "Invalid email or password" });
+        }
+    
+
+        /**  "email": "emaness@gmail.com",
+
+         * Patient@1233
+         * **/
+        [HttpGet("doctors")]
             public IActionResult GetDoctors([FromQuery] DoctorSearchRequestModel model)
             {
                 var doctors = _patientService.GetDoctors(model.SearchDate, model.PageSize, model.PageNumber);

@@ -1,9 +1,11 @@
 ﻿using DomainLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer;
 using System;
+using System.Threading.Tasks;
 
 namespace VezeetaDemo.Controllers
 {
@@ -18,28 +20,37 @@ namespace VezeetaDemo.Controllers
                 _doctorService = doctorService;
             }
 
-            [HttpPost("login")]
-            public IActionResult Login([FromBody] LoginRequestModel model)
+     /**
+        //Doctor Login
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequestModel model)
+        {   //find the user by email
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            //check if the user exists, password validation
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var result = _doctorService.Login(model.Email, model.Password);
+                // User is authenticated successfully
+                var roles = await _userManager.GetRolesAsync(user);
 
-                if (result)
-                {
-                    return Ok("Doctor logged in successfully.");
-                }
-
-                return Unauthorized("Invalid credentials.");
+                return Ok(new { Message = "Login successful" });
             }
+
+            //else return Authentication failed
+            return Unauthorized(new { Message = "Invalid email or password" });
+        }
+
         //if u want to authorize only doctor to see the bookings when logged in.
-       // [Authorize(Roles="Doctor")] and if you're using mvc-> in .cshtml page @if(User.IsInRole("Doctor") <h>hey</h>
-       
-            [HttpGet("bookings")]
+        // [Authorize(Roles="Doctor")] and if you're using mvc-> in .cshtml page @if(User.IsInRole("Doctor") <h>hey</h>
+
+        [HttpGet("bookings")]
             public IActionResult GetAllBookings([FromQuery] BookingSearchRequestModel model)
             {
                 var patients = _doctorService.GetAllBooking(model.SearchDate, model.PageSize, model.PageNumber);
 
                 return Ok(patients);
             }
+
+        **/
 /**
             [HttpPost("confirm-checkup")]
             public IActionResult ConfirmCheckup([FromBody] ConfirmCheckupRequestModel model)

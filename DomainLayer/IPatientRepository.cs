@@ -14,7 +14,7 @@ namespace RepositoryLayer
     {
          Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel);
 
-        public bool Login(string email, string password);
+         Task<IdentityResult> Login(LoginRequestModel Patientlogin);
 
         //Doctor Data for patient
 

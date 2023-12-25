@@ -13,7 +13,6 @@ namespace DomainLayer.Models
     {
         public bool IsActive;
 
-        public string FullName { get; set; }
         public string Specialization { get; set; }
         
         [Column(TypeName = "decimal(18, 2)")] 

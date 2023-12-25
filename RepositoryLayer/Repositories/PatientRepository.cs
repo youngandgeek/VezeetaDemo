@@ -24,7 +24,7 @@ namespace RepositoryLayer
             _userManager = userManager;
         }
 
-        public async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
+        public  async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
         {
             try
             {
@@ -48,11 +48,11 @@ namespace RepositoryLayer
         }
 
 
-        public bool Login(string email, string password)
+        public async Task<IdentityResult> Login(LoginRequestModel Patientlogin)
         {
             // Implement login logic based on your requirements
             // For example, check credentials against the database
-            var patient = _context.Patients.FirstOrDefault(p => p.PatientUser.Email == email);
+            var patient = _context.Patients.FirstOrDefault(p => p.PatientUser.Email == Patientlogin.Email);
 
             if (patient != null)
             {
@@ -63,7 +63,8 @@ namespace RepositoryLayer
                 // }
             }
 
-            return false;
+                  return IdentityResult.Failed(new IdentityError { Description = "Failed to Login." });
+      
         }
 
         public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)

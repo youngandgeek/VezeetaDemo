@@ -1,3 +1,4 @@
+using DomainLayer;
 using DomainLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,9 +48,9 @@ namespace VezeetaDemo
             services.AddScoped<IDoctorRepository, DoctorRepository>();
      **/
 
-            services.AddScoped<AdminService>();
-            services.AddScoped<IAdminRepository, AdminRepository>();
-
+          services.AddScoped<AdminService>();
+          services.AddScoped<IAdminRepository, AdminRepository>();
+         
 
 
             services.AddControllers();

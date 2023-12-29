@@ -1,4 +1,5 @@
-﻿using DomainLayer.Models;
+﻿using DomainLayer;
+using DomainLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RepositoryLayer.Repositories
 {
-    public class AdminRepository 
+    public class AdminRepository: IAdminRepository
     {
         public async Task<SignInResult> Login(LoginRequestModel Adminlogin)
         {

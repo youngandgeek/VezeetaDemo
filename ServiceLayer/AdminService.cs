@@ -15,20 +15,20 @@ namespace ServiceLayer
 {
     public class AdminService
     {
-        private readonly IAdminRepository _iAdminRepository;
+      //  private readonly IAdminRepository _iAdminRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AdminService(IAdminRepository iAdminRepository,
+        public AdminService(
          UserManager<ApplicationUser> userManager,
          RoleManager<IdentityRole> roleManager,
          IConfiguration configuration,
          SignInManager<ApplicationUser> signInManager
          )
         {
-            _iAdminRepository = iAdminRepository;
+         //   _iAdminRepository = iAdminRepository;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;

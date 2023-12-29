@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RepositoryLayer.Repositories
 {
-    public class AdminRepository : IAdminRepository
+    public class AdminRepository 
     {
         public async Task<SignInResult> Login(LoginRequestModel Adminlogin)
         {

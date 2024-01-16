@@ -22,7 +22,7 @@ namespace VezeetaDemo.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUpAsync([FromBody] PatientSignUpModel patientSignUpModel)
+        public async Task<IActionResult> SignUpAsync([FromBody] UserSignUpModel patientSignUpModel)
 
         {
             var result = await _patientService.SignUp(patientSignUpModel);
@@ -40,7 +40,8 @@ namespace VezeetaDemo.Controllers
         }
 
 
-        [HttpPost("login")]
+      /**login from Auth Controller 
+       * [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequestModel model)
         {
             var result = await _patientService.Login(model);
@@ -55,12 +56,13 @@ namespace VezeetaDemo.Controllers
             }
         }
 
-            /**  "email": "emaness@gmail.com",
+     **/
+        /**  "email": "emaness@gmail.com",
 
              * Patient@1233
              * **/
             
-            [HttpGet("doctors")]
+  /**          [HttpGet("doctors")]
                 public IActionResult GetDoctors([FromQuery] DoctorSearchRequestModel model)
                 {
                     var doctors = _patientService.GetDoctors(model.SearchDate, model.PageSize, model.PageNumber);
@@ -68,7 +70,7 @@ namespace VezeetaDemo.Controllers
                     return Ok(doctors);
                 }
        
-        
+     **/   
 
        
         

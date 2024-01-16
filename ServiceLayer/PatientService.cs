@@ -51,7 +51,7 @@ private readonly SignInManager<ApplicationUser> _signInManager;
 
 
 
-   public async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
+   public async Task<IdentityResult> SignUp(UserSignUpModel patientSignUpModel)
         {
             // Check if passwords match
             if (patientSignUpModel.Password != patientSignUpModel.ConfirmPassword)
@@ -107,7 +107,7 @@ private readonly SignInManager<ApplicationUser> _signInManager;
         }
 
 
-        public async Task<SignInResult> Login(LoginRequestModel patientLogin)
+        public async Task<SignInResult> PatientLogin(LoginRequestModel patientLogin)
         {
             // Find the user by email
             var user = await _userManager.FindByEmailAsync(patientLogin.Email);
@@ -132,11 +132,12 @@ private readonly SignInManager<ApplicationUser> _signInManager;
 
         //find the user by email
 
-        public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
+    /**    public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
 {
     // Additional validation and business logic can be added here if needed
 
     return _patientRepository.GetDoctors(searchDate, pageSize, pageNumber);
 }
+    **/
 }
 }

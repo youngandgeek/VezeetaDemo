@@ -13,9 +13,12 @@ namespace DomainLayer.Models
         public DateTime Date { get; set; }
 
         // Foreign key property to associate with a doctor
-        [ForeignKey("Doctor")]
-        public int DoctorId { get; set; }
-        // Navigation property to represent the relationship with a doctor
-        public Doctor Doctors { get; set; }
+        /**  [ForeignKey("Doctor")]
+          public int DoctorId { get; set; }
+          // Navigation property to represent the relationship with a doctor
+     //     public Doctor Doctors { get; set; }
+      
+         **/
+
     }
 }

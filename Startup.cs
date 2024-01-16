@@ -7,15 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RepositoryLayer;
 using RepositoryLayer.Context;
 using RepositoryLayer.Repositories;
 using ServiceLayer;
+using System.Security.Cryptography.X509Certificates;
+using VezeetaDemo.RepositoryLayer;
+
 namespace VezeetaDemo
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,17 +45,21 @@ namespace VezeetaDemo
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<PatientService>();
+      
             services.AddScoped<IPatientRepository, PatientRepository>();
 
+            services.AddScoped<ServiceLayer.PatientService>();
 
-     /**       services.AddScoped<DoctorService>();
-            services.AddScoped<IDoctorRepository, DoctorRepository>();
-     **/
+           services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<ServiceLayer.AdminService>();
+        
 
-          services.AddScoped<AdminService>();
-          services.AddScoped<IAdminRepository, AdminRepository>();
-         
+
+                services.AddScoped<DoctorService>();
+                   services.AddScoped<IDoctorRepository, DoctorRepository>();
+            
+    
+
 
 
             services.AddControllers();
@@ -61,7 +70,7 @@ namespace VezeetaDemo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AdminService adminService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -70,14 +79,16 @@ namespace VezeetaDemo
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VezeetaDemo v1"));
 
-                // Seed admin user during application startup using AdminService
-                adminService.SeedAdminUser();
+
+
             }
 
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+
 
             app.UseEndpoints(endpoints =>
             {

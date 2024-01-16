@@ -10,8 +10,8 @@ using RepositoryLayer.Context;
 namespace VezeetaDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231217171528_pricen")]
-    partial class pricen
+    [Migration("20240108230949_innit")]
+    partial class innit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,12 +33,8 @@ namespace VezeetaDemo.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -47,14 +43,18 @@ namespace VezeetaDemo.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -79,8 +79,15 @@ namespace VezeetaDemo.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Specialization")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -101,7 +108,24 @@ namespace VezeetaDemo.Migrations
 
                     b.ToTable("AspNetUsers");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
+                    b.HasData(
+                        new
+                        {
+                            Id = "51cd1593-2bd7-42b1-94ff-80afedb28678",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f8bae63b-b9b3-4251-a4c8-f17dab7fbcd0",
+                            Email = "Admin@vezeeta.com",
+                            EmailConfirmed = false,
+                            FirstName = "admin",
+                            Gender = 0,
+                            LastName = "vezeeta",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAEAACcQAAAAEFw3YmasUZQqxv/SIKkeU/JUAClp9EbCIR1ypnDtSULfNnEcMzmprEph6VAPJHYvAg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "bc37f39e-91f8-4e95-8895-ad3acafb0790",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin@vezeeta.com"
+                        });
                 });
 
             modelBuilder.Entity("DomainLayer.Models.Appointment", b =>
@@ -114,15 +138,7 @@ namespace VezeetaDemo.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DoctorsId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DoctorsId");
 
                     b.ToTable("Appointments");
                 });
@@ -137,19 +153,9 @@ namespace VezeetaDemo.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DoctorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PatientId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("Bookings");
                 });
@@ -179,6 +185,29 @@ namespace VezeetaDemo.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "c2df0b76-67b8-4ec0-8989-99a2933e2690",
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "decf2667-b3fa-4968-b81b-7a439ff37cd1",
+                            Name = "patient",
+                            NormalizedName = "PATIENT"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            ConcurrencyStamp = "21fe2d02-b811-4726-b912-2f85efabc5dc",
+                            Name = "doctor",
+                            NormalizedName = "DOCTOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -264,6 +293,13 @@ namespace VezeetaDemo.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "51cd1593-2bd7-42b1-94ff-80afedb28678",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -285,58 +321,6 @@ namespace VezeetaDemo.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DomainLayer.Models.Doctor", b =>
-                {
-                    b.HasBaseType("DomainLayer.Models.ApplicationUser");
-
-                    b.Property<string>("DoctorUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Specialization")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("DoctorUserId");
-
-                    b.HasDiscriminator().HasValue("Doctor");
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.Patient", b =>
-                {
-                    b.HasBaseType("DomainLayer.Models.ApplicationUser");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PatientUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Patient_UserId");
-
-                    b.HasIndex("PatientUserId");
-
-                    b.HasDiscriminator().HasValue("Patient");
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.Appointment", b =>
-                {
-                    b.HasOne("DomainLayer.Models.Doctor", "Doctors")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DoctorsId");
-
-                    b.Navigation("Doctors");
-                });
-
             modelBuilder.Entity("DomainLayer.Models.Booking", b =>
                 {
                     b.HasOne("DomainLayer.Models.Appointment", "Appointment")
@@ -345,19 +329,7 @@ namespace VezeetaDemo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DomainLayer.Models.Doctor", "DoctorInfo")
-                        .WithMany("Bookings")
-                        .HasForeignKey("DoctorId");
-
-                    b.HasOne("DomainLayer.Models.Patient", "Patientinfo")
-                        .WithMany("Bookings")
-                        .HasForeignKey("PatientId");
-
                     b.Navigation("Appointment");
-
-                    b.Navigation("DoctorInfo");
-
-                    b.Navigation("Patientinfo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -409,55 +381,6 @@ namespace VezeetaDemo.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.Doctor", b =>
-                {
-                    b.HasOne("DomainLayer.Models.ApplicationUser", "DoctorUser")
-                        .WithMany()
-                        .HasForeignKey("DoctorUserId");
-
-                    b.HasOne("DomainLayer.Models.ApplicationUser", null)
-                        .WithOne("DoctorProfile")
-                        .HasForeignKey("DomainLayer.Models.Doctor", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("DoctorUser");
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.Patient", b =>
-                {
-                    b.HasOne("DomainLayer.Models.ApplicationUser", null)
-                        .WithOne("PatientProfile")
-                        .HasForeignKey("DomainLayer.Models.Patient", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.HasOne("DomainLayer.Models.ApplicationUser", "PatientUser")
-                        .WithMany()
-                        .HasForeignKey("PatientUserId");
-
-                    b.Navigation("PatientUser");
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("DoctorProfile");
-
-                    b.Navigation("PatientProfile");
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.Doctor", b =>
-                {
-                    b.Navigation("Appointments");
-
-                    b.Navigation("Bookings");
-                });
-
-            modelBuilder.Entity("DomainLayer.Models.Patient", b =>
-                {
-                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

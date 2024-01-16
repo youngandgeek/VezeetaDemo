@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RepositoryLayer
 {
-    public class PatientRepository : IPatientRepository
+    public class PatientRepository :IPatientRepository
     {
 
         private readonly AppDbContext _context;
@@ -24,7 +24,7 @@ namespace RepositoryLayer
             _userManager = userManager;
         }
 
-        public  async Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel)
+        public  async Task<IdentityResult> SignUp(UserSignUpModel patientSignUpModel)
         {
             try
             {
@@ -44,13 +44,16 @@ namespace RepositoryLayer
                 }
 
                 // Create patient
-                var patient = new Patient
+                var patient = new ApplicationUser
                 {
-                    UserName = patientSignUpModel.Username,
+                //    UserName = patientSignUpModel.Username,
+                  FirstName= patientSignUpModel.FirstName,
+                  LastName= patientSignUpModel.LastName,
                     Email = patientSignUpModel.Email,
-                    PhoneNumber = patientSignUpModel.Phone,
                     Gender = (Gender)patientSignUpModel.Gender,
-                    DateOfBirth = (DateTime)patientSignUpModel.DateOfBirth
+                    DateOfBirth = (DateTime)patientSignUpModel.DateOfBirth,
+                    Phone=patientSignUpModel.Phone
+                   
                 };
                 var result = await _userManager.CreateAsync(patient, patientSignUpModel.Password);
 
@@ -63,11 +66,11 @@ namespace RepositoryLayer
             }
         }
 
-        public async Task<SignInResult> Login(LoginRequestModel Patientlogin) { 
+        public async Task<SignInResult> PatientLogin(LoginRequestModel Patientlogin) { 
         // The Login method is implemented in the PatientService.
         throw new NotImplementedException("Login method is not implemented in PatientRepository.");
     }
-
+        /**
     public List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber)
         {
             // Implement logic to get a list of doctors based on search criteria
@@ -98,5 +101,6 @@ namespace RepositoryLayer
         {
             throw new NotImplementedException();
         }
-    }
+    **/
+        }
 }

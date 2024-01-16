@@ -12,14 +12,14 @@ namespace DomainLayer.Models
     {
         public int Id { get; set; }
 
-        [ForeignKey("PatientInfo")]
+    /**    [ForeignKey("PatientInfo")]
         public String PatientId { get; set; }
-        public virtual Patient Patientinfo { get; set; }
+     //   public virtual Patient Patientinfo { get; set; }
 
         [ForeignKey("DoctorInfo")]
         public String DoctorId { get; set; }
-        public virtual Doctor DoctorInfo { get; set; }
-
+      //  public virtual Doctor DoctorInfo { get; set; }
+    **/
         [ForeignKey("Appointment")]
         public int AppointmentId{ get; set; }
         // Navigation properties to represent the relationships with Appointment

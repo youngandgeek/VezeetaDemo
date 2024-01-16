@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,46 +17,55 @@ namespace RepositoryLayer.Context
     //for database connection 
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
-
-        //constructor
-        public AppDbContext() : base()
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
         }
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-       : base(options)
+        public AppDbContext()
         {
         }
 
+     
 
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Patient> Patients { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            //Add the roles by calling the SeedRole method
-            SeedRoles(builder);
 
-            // Add any custom configurations or constraints here
-
-            // Example: Configure a one-to-one relationship between ApplicationUser and Patient
-            //PatientProfile from the refrence of Patient in ApplicationUser
-            builder.Entity<ApplicationUser>()
-                .HasOne(p => p.PatientProfile)
-                .WithOne()
-                .HasForeignKey<Patient>(p => p.Id);
+            builder.Entity<IdentityRole>().HasData(new IdentityRole {
+                Id = "1", // Use the actual ID
+                Name = "admin", NormalizedName = "admin".ToUpper() });
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = "2", // Use the actual ID
+                Name = "patient", NormalizedName = "patient".ToUpper() });
+            builder.Entity<IdentityRole>().HasData(new IdentityRole {Id = "3", Name = "doctor", NormalizedName = "doctor".ToUpper() });
 
 
-            // Example: Configure a one-to-one relationship between ApplicationUser and Doctor
-            builder.Entity<ApplicationUser>()
-                .HasOne(d => d.DoctorProfile)
-                .WithOne()
-                .HasForeignKey<Doctor>(d => d.Id);
+
+            // Seed admin user
+            var adminUser = new ApplicationUser
+            {
+                FirstName = "admin",
+                LastName = "vezeeta",
+                UserName = "Admin@vezeeta.com",
+                Email = "Admin@vezeeta.com",
+                Phone = "1234567890",
+                // Add any additional properties you may have in your ApplicationUser model
+            };
+
+            var hasher = new PasswordHasher<ApplicationUser>();
+            adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin@123");
+
+            builder.Entity<ApplicationUser>().HasData(adminUser);
+
+            // Assign the admin user to the 'admin' role
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { UserId = adminUser.Id, RoleId = "1" }
+            // Add other user roles as needed
+            );
 
             // Configure a one-to-many relationship between Doctor and Appointments
             /**            builder.Entity<Doctor>()
@@ -79,39 +89,6 @@ namespace RepositoryLayer.Context
 
 
 
-        //Add Roles to the AspNetUserRole default dentity table
-        private static void SeedRoles(ModelBuilder builder)
-        {
-            builder.Entity<IdentityRole>().HasData(
-                new IdentityRole()
-                {
-                    Name = "Admin",
-                    //helps prevent conflicts by ensuring that updates are applied only if the entity's concurrency stamp matches
-                    ConcurrencyStamp = "1",
-                    //NormalizedName is used to support case-insensitive searches and comparisons for role names.
-                    NormalizedName = "Admin"
-                },
 
-                new IdentityRole()
-                {
-                    Name = "Patient",
-                    ConcurrencyStamp = "2",
-                    NormalizedName = "Patient"
-                }
-                ,
-
-                    new IdentityRole()
-                    {
-                        Name = "Doctor",
-                        ConcurrencyStamp = "3",
-                        NormalizedName = "Doctor"
-                    }
-                    );
-
-
-          
-        
-
-    }
     }
     }

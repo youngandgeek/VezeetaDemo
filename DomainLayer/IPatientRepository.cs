@@ -12,21 +12,21 @@ namespace RepositoryLayer
 {
     public interface IPatientRepository
     {
-         Task<IdentityResult> SignUp(PatientSignUpModel patientSignUpModel);
+         Task<IdentityResult> SignUp(UserSignUpModel patientSignUpModel);
 
-         Task<SignInResult> Login(LoginRequestModel Patientlogin);
+         Task<SignInResult> PatientLogin(LoginRequestModel Patientlogin);
 
         //Doctor Data for patient
 
         //to get a list of all doctors available
-        public List<Doctor> GetDoctors(int Page, int pageSize);
+    //    public List<Doctor> GetDoctors(int Page, int pageSize);
         //to see the doctor's appointment from the Appointment model
-        public bool GetDoctorAppointments(Appointment appointment);
+  //      public bool GetDoctorAppointments(Appointment appointment);
 
         //get patient booking
-        public List<Booking> GetBooking();
+    //    public List<Booking> GetBooking();
 
-        public bool CancelBooking(int bookingId);
-        List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber);
+      //  public bool CancelBooking(int bookingId);
+    //    List<Doctor> GetDoctors(DateTime searchDate, int pageSize, int pageNumber);
     }
 }

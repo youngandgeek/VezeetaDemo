@@ -1,12 +1,14 @@
-﻿using DomainLayer.Models.DTO;
+﻿using DomainLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 namespace DomainLayer
 {
   public interface IAdminRepository
     {
- //      Task<IdentityResult> CreateDoctor(DoctorSignUpModel doctorSignUpModel);
+        Task<SignInResult> AdminLogin(LoginRequestModel Adminlogin);
+
+        //  Task<IdentityResult> AddDoctor(UserSignUpModel doctorSignUpModel);
 
     }
-  
+
 }

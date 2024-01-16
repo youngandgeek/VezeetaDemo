@@ -10,7 +10,8 @@ namespace VezeetaDemo.RepositoryLayer
     {
         Task<SignInResult> Login(LoginRequestModel drLoginModel);
 
-        public List<Patient> GetAllBooking(DateTime searchDate, int pageSize, int pageNumber);
+        /**
+      //  public List<Patient> GetAllBooking(DateTime searchDate, int pageSize, int pageNumber);
         public bool ConfirmCheckup(int bookingId);
 
         //setting for adding dr's apponments
@@ -18,7 +19,7 @@ namespace VezeetaDemo.RepositoryLayer
         public bool AddAppoinment(Appointment appointment);
         public bool UpdateAppoinment(int appointmentId, string newTime);
         public bool DeleteAppoinment(int appointmentId);
-
+**/
 
     }
 }

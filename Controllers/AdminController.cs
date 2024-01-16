@@ -17,21 +17,9 @@ namespace VezeetaDemo.Controllers
             _adminService = adminService;
         }
 
-        [HttpPost("login")]
-        //Doctor Login
-        public async Task<IActionResult> LoginAsync([FromBody] LoginRequestModel adminModel)
-        {
-            var result = await _adminService.Login(adminModel);
 
-            if (result.Succeeded)
-            {
-                return Ok(new { Message = "Login successful" });
-            }
-            else
-            {
-                return Unauthorized(new { Message = "Invalid email or password" });
-            }
 
-        }
+       
+
     }
 }

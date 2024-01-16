@@ -18,9 +18,9 @@ namespace ServiceLayer
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly DoctorRepository _doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
 
-        public DoctorService(DoctorRepository doctorRepository,
+        public DoctorService(IDoctorRepository doctorRepository,
          UserManager<ApplicationUser> userManager,
          RoleManager<IdentityRole> roleManager,
          IConfiguration configuration,
@@ -55,7 +55,7 @@ namespace ServiceLayer
             
 
         }
-            public List<Patient> GetAllBooking(DateTime searchDate, int pageSize, int pageNumber)
+       /**     public List<Patient> GetAllBooking(DateTime searchDate, int pageSize, int pageNumber)
         {
             // Additional validation and business logic can be added here if needed
 
@@ -89,6 +89,6 @@ namespace ServiceLayer
 
             return _doctorRepository.DeleteAppoinment(appointmentId);
         }
-
+       **/
     }
 }

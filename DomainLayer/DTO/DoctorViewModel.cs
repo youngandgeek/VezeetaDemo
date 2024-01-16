@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DomainLayer.Models.DTO
+namespace DomainLayer.DTO
 {
-    public class DoctorSignUpModel
+    public class DoctorViewModel
     {
     }
 }
